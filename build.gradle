@@ -23,14 +23,30 @@ jar {
 }
 
 dependencies {
+//    Swagger
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.9'
+
+//    JPA
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+//    JavaMailSender
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+//    Spring Web
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    compileOnly 'org.projectlombok:lombok'
+
+//    DevTools
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+//    H2
     runtimeOnly 'com.h2database:h2'
+
+//    MySQL
     runtimeOnly 'com.mysql:mysql-connector-j'
+
+    compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
