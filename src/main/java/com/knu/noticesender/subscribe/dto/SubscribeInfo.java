@@ -1,6 +1,6 @@
 package com.knu.noticesender.subscribe.dto;
 
-import com.knu.noticesender.subscribe.model.CategoryType;
+import com.knu.noticesender.subscribe.model.SubscribeType;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,5 +9,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class SubscribeInfo {
     private String subId;
-    private List<CategoryType> types;
+    private List<SubscribeType> types;
 }

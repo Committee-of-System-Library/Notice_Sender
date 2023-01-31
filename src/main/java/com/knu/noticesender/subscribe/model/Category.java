@@ -44,7 +44,7 @@ public class Category {
         private String subscribeId;
 
         @Enumerated(EnumType.STRING)
-        private CategoryType type;
+        private SubscribeType type;
     }
 }
 
