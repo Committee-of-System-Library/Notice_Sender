@@ -7,5 +7,5 @@ import lombok.Data;
 @Data
 public class SubscribeRequest {
     private String subId;
-    private List<SubscribeType> categories;
+    private List<SubscribeType> types;
 }
