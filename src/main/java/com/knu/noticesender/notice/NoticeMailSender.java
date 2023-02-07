@@ -1,20 +1,20 @@
 package com.knu.noticesender.notice;
 
-import com.knu.noticesender.notice.dto.NoticeDto;
-import com.knu.noticesender.subscribe.model.Subscribe;
-import com.knu.noticesender.subscribe.repository.SubscribeRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import com.knu.noticesender.notice.dto.NoticeDto;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Value;
+import com.knu.noticesender.subscribe.model.SubscribeType;
+import com.knu.noticesender.subscribe.service.SubscribeService;
 
 @RequiredArgsConstructor
 @Component
 public class NoticeMailSender implements NoticeSender{
     private final JavaMailSender mailSender;
-    private final SubscribeRepository subscribeRepository;
+    private final SubscribeService subscribeService;
 
     @Value("${group.email}")
     private String SERVER_EMAIL;
@@ -36,7 +36,7 @@ public class NoticeMailSender implements NoticeSender{
     }
 
     private String[] findAllSubscribers() {
-        List<Subscribe> subscribers = subscribeRepository.findAll();
-        return subscribers.stream().map(Subscribe::getId).toArray(String[]::new);
+        List<String> subscribers = subscribeService.findAllSubIdByType(SubscribeType.EMAIL);
+        return subscribers.toArray(String[]::new);
     }
 }

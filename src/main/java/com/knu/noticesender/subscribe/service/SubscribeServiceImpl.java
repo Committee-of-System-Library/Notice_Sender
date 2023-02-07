@@ -1,88 +1,94 @@
 package com.knu.noticesender.subscribe.service;
 
-import com.knu.noticesender.subscribe.dto.SubscribeInfo;
-import com.knu.noticesender.subscribe.dto.SubscribeRequest;
-import com.knu.noticesender.subscribe.model.Category;
-import com.knu.noticesender.subscribe.model.Category.CategoryId;
-import com.knu.noticesender.subscribe.model.CategoryType;
-import com.knu.noticesender.subscribe.model.Subscribe;
-import com.knu.noticesender.subscribe.repository.CategoryRepository;
-import com.knu.noticesender.subscribe.repository.SubscribeRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import com.knu.noticesender.subscribe.dto.SubscribeInfo;
+import com.knu.noticesender.subscribe.dto.SubscribeRequest;
+import com.knu.noticesender.subscribe.model.Subscribe;
+import com.knu.noticesender.subscribe.model.Subscribe.SubscribeId;
+import com.knu.noticesender.subscribe.model.SubscribeType;
+import com.knu.noticesender.subscribe.model.Subscriber;
+import com.knu.noticesender.subscribe.repository.SubscribeRepository;
+import com.knu.noticesender.subscribe.repository.SubscriberRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 @Service
 @RequiredArgsConstructor
 public class SubscribeServiceImpl implements SubscribeService {
 
+    private final SubscriberRepository subscriberRepository;
     private final SubscribeRepository subscribeRepository;
-    private final CategoryRepository categoryRepository;
 
     @Override
     @Transactional
     public void subscribe(SubscribeRequest req) {
-        Subscribe subscribe = subscribeRepository.save(createSubscribe(req));
-        for (CategoryType category : req.getCategories()) {
-            categoryRepository.save(createCategory(subscribe, category));
+        Subscriber subscriber = subscriberRepository.save(createSubscribe(req));
+        for (SubscribeType subscribe : req.getTypes()) {
+            subscribeRepository.save(createSubscribe(subscriber, subscribe));
         }
     }
 
     @Override
     public void unsubscribe(SubscribeRequest req) {
-        for (CategoryType category : req.getCategories()) {
+        for (SubscribeType subscribe : req.getTypes()) {
             try {
-                categoryRepository.deleteById(getCategoryId(req.getSubId(), category));
+                subscribeRepository.deleteById(getSubscribeId(req.getSubId(), subscribe));
             } catch (EmptyResultDataAccessException e) {}
         }
     }
 
     @Override
-    public List<SubscribeInfo> getAllSubscribeInfo() {
+    public List<SubscribeInfo> findAll() {
         List<SubscribeInfo> result = new ArrayList<>();
-        for (Subscribe subscribe : subscribeRepository.findAll()) {
-            List<CategoryType> types = getTypes(subscribe);
-            result.add(new SubscribeInfo(subscribe.getId(), types));
+        for (Subscriber subscriber : subscriberRepository.findAll()) {
+            List<SubscribeType> types = getTypes(subscriber);
+            result.add(new SubscribeInfo(subscriber.getId(), types));
         }
         return result;
     }
 
     @Override
-    public SubscribeInfo getSubscribeInfo(String subId) {
-        Subscribe subscribe = subscribeRepository.findById(subId)
+    public SubscribeInfo findById(String id) {
+        Subscriber subscriber = subscriberRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Wrong SubId"));
-        List<CategoryType> types = getTypes(subscribe);
+        List<SubscribeType> types = getTypes(subscriber);
 
-        return new SubscribeInfo(subscribe.getId(), types);
+        return new SubscribeInfo(subscriber.getId(), types);
     }
 
-    private List<CategoryType> getTypes(Subscribe subscribe) {
-        List<CategoryType> types = categoryRepository
-                .findCategoriesById_SubscribeId(subscribe.getId())
+    @Override
+    public List<String> findAllSubIdByType(SubscribeType type) {
+        List<Subscribe> subscribes = subscribeRepository.findSubscribesById_Type(type);
+        return subscribes.stream().map(c -> c.getId().getSubscribeId()).collect(Collectors.toList());
+    }
+
+    private List<SubscribeType> getTypes(Subscriber subscriber) {
+        List<SubscribeType> types = subscribeRepository
+                .findSubscribesById_SubscribeId(subscriber.getId())
                 .stream().map(c -> c.getId().getType())
                 .collect(Collectors.toList());
         return types;
     }
 
-    private Subscribe createSubscribe(SubscribeRequest req) {
-        return Subscribe.builder()
+    private Subscriber createSubscribe(SubscribeRequest req) {
+        return Subscriber.builder()
                 .id(req.getSubId())
                 .build();
     }
 
-    private Category createCategory(Subscribe subscribe, CategoryType category) {
-        return Category.builder()
-                .id(getCategoryId(subscribe.getId(), category))
-                .subscribe(subscribe)
+    private Subscribe createSubscribe(Subscriber subscriber, SubscribeType subscribe) {
+        return Subscribe.builder()
+                .id(getSubscribeId(subscriber.getId(), subscribe))
+                .subscriber(subscriber)
                 .build();
     }
 
-    private static CategoryId getCategoryId(String subscribeId, CategoryType category) {
-        return new CategoryId(subscribeId, category);
+    private static SubscribeId getSubscribeId(String subscribeId, SubscribeType subscribe) {
+        return new SubscribeId(subscribeId, subscribe);
     }
 
 }
