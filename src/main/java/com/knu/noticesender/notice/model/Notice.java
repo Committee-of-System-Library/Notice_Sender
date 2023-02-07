@@ -28,13 +28,18 @@ public class Notice {
 
     private LocalDateTime createdDate;
 
+    @Enumerated(EnumType.STRING)
+    private NoticeType type;
+
     @Builder
-    public Notice(Long num, String link, String title, Category category, String content, LocalDateTime createdDate) {
+    public Notice(Long num, String link, String title, Category category, String content, LocalDateTime createdDate,
+                  NoticeType type) {
         this.num = num;
         this.link = link;
         this.title = title;
         this.category = category;
         this.content = content;
         this.createdDate = createdDate;
+        this.type = type;
     }
 }
