@@ -1,4 +1,4 @@
-package com.knu.noticesender.notice.controller;
+package com.knu.noticesender.notice.api;
 
 import com.knu.noticesender.notice.NoticeMailSender;
 import com.knu.noticesender.notice.dto.NoticeDto;
@@ -14,7 +14,7 @@ public class NoticeMailSenderApi {
 
     @PostMapping("/api/v1/notice-sender/mail/send")
     public void sendNotice(NoticeDto dto) {
-        noticeMailSender.send(dto);
+//        noticeMailSender.send(dto);
     }
 }
 

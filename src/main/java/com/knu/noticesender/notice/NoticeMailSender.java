@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Value;
 import com.knu.noticesender.subscribe.model.SubscribeType;
 import com.knu.noticesender.subscribe.service.SubscribeService;
 
-@RequiredArgsConstructor
 @Component
+@RequiredArgsConstructor
 public class NoticeMailSender implements NoticeSender{
     private final JavaMailSender mailSender;
     private final SubscribeService subscribeService;
@@ -30,7 +30,7 @@ public class NoticeMailSender implements NoticeSender{
         msg.setFrom(SERVER_EMAIL);
         msg.setTo(findAllSubscribers());
         msg.setSubject(dto.getTitle());
-        msg.setText(dto.getText());
+//        msg.setText(dto.getText());
 
         return msg;
     }
