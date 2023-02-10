@@ -11,11 +11,11 @@ public class NoticeDiscordMessageConverter {
     public static DiscordMessage convertToDiscordMessage(String botName, NoticeDto dto) {
         DiscordMessage message = new DiscordMessage();
         message.setUsername(botName);
-        message.setEmbeds(getEmbeds(dto));
+        message.setEmbeds(createEmbeds(dto));
         return message;
     }
 
-    private static List<Embed> getEmbeds(NoticeDto dto) {
+    private static List<Embed> createEmbeds(NoticeDto dto) {
         List<Embed> embeds = new ArrayList<>();
         List<Field> fields = new ArrayList<>();
 
