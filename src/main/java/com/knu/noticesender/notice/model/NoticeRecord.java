@@ -1,5 +1,6 @@
 package com.knu.noticesender.notice.model;
 
+import com.knu.noticesender.notice.dto.NoticeDto;
 import java.io.Serializable;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
@@ -16,7 +17,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * Sender 별 Notice 알림 기록을 저장하기 위한 클래스
+ * Sender 별로 Notice 에 대한 알림 기록을 저장하기 위한 클래스
  */
 @Entity
 @Getter
@@ -25,6 +26,9 @@ public class NoticeRecord {
     @EmbeddedId
     private NoticeRecordId id;
 
+    /**
+     * 알림 전송 여부
+     */
     private Boolean isSent;
 
     @MapsId("noticeId")
@@ -38,6 +42,10 @@ public class NoticeRecord {
         this.notice = notice;
     }
 
+    /**
+     * Notice - Sender 복합 키 매핑
+     * @see Sender
+     */
     @Data
     @Embeddable
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -54,5 +62,15 @@ public class NoticeRecord {
             this.noticeId = noticeId;
             this.sender = sender;
         }
+    }
+
+    /**
+     * Record 후처리 동작 (Record Post Process)
+     *
+     * Ex) 알림 전송 후에 호출
+     * @see com.knu.noticesender.notice.NoticeDiscordSender#send(NoticeDto)
+     */
+    public void process() {
+        this.isSent = true;
     }
 }
