@@ -5,6 +5,6 @@ import com.knu.noticesender.notice.model.NoticeType;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface NoticeRepository extends JpaRepository<Notice, Integer> {
+public interface NoticeRepository extends JpaRepository<Notice, Long> {
     List<Notice> findAllByType(NoticeType type);
 }
