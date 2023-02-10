@@ -1,7 +1,7 @@
 package com.knu.noticesender.notice;
 
-import java.util.Map;
-import java.util.HashMap;
+import com.knu.noticesender.notice.dto.discord.DiscordMessage;
+import com.knu.noticesender.notice.utils.NoticeDiscordMessageConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.HttpEntity;
@@ -23,8 +23,7 @@ public class NoticeDiscordSender implements NoticeSender{
     public void send(NoticeDto dto) {
         RestTemplate rest = new RestTemplate();
         HttpEntity<String> request = new HttpEntity<>(createSendBody(dto), createSendHeaders());
-        String url = categoryUrlMapper.getUrl(dto.getCategory());
-        rest.postForEntity(url, request, Object.class);
+        rest.postForEntity(categoryUrlMapper.getUrl(dto.getCategory()), request, Object.class);
     }
 
     private HttpHeaders createSendHeaders() {
@@ -34,10 +33,8 @@ public class NoticeDiscordSender implements NoticeSender{
     }
 
     private String createSendBody(NoticeDto dto) {
-        Map<String, String> body = new HashMap<>();
-        body.put("username", "Server");
-        body.put("content", dto.convertToDiscordMessage());
-        return convertToJson(body);
+        DiscordMessage discordMessage = NoticeDiscordMessageConverter.convertToDiscordMessage("Server", dto);
+        return convertToJson(discordMessage.getMessage());
     }
 
     private String convertToJson(Object body) {
