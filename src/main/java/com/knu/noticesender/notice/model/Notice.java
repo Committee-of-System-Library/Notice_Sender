@@ -44,4 +44,8 @@ public class Notice {
         this.createdDate = createdDate;
         this.type = type;
     }
+
+    public void changeType(NoticeType type) {
+        this.type = type;
+    }
 }
