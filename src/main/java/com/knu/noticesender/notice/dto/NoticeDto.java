@@ -48,4 +48,8 @@ public class NoticeDto {
     public static List<NoticeDto> fromList(List<Notice> notices) {
         return notices.stream().map(NoticeDto::new).collect(Collectors.toList());
     }
+
+    public static NoticeDto ofEntity(Notice notice) {
+        return new NoticeDto(notice);
+    }
 }
