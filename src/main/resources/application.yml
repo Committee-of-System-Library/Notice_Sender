@@ -1,0 +1,28 @@
+discord:
+  urls:
+    all: ${DISCORD_ALL}
+
+server:
+  port: ${PORT}
+
+springdoc:
+  swagger-ui:
+    path: swagger.html
+    operations-sorter: method
+  #  version: v1
+  paths-to-match: /api/**
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
