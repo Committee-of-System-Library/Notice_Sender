@@ -1,9 +1,11 @@
 package com.knu.noticesender.notice.model;
 
 import com.knu.noticesender.notice.dto.NoticeDto;
+import com.knu.noticesender.notice.utils.NoticeTypeConverter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Convert;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -28,6 +30,9 @@ public class NoticeRecord {
     @EmbeddedId
     private NoticeRecordId id;
 
+    @Convert(converter = NoticeTypeConverter.class)
+    private NoticeType noticeType;
+
     /**
      * 알림 전송 여부
      */
@@ -38,8 +43,9 @@ public class NoticeRecord {
     private Notice notice;
 
     @Builder
-    public NoticeRecord(NoticeRecordId id, Boolean isSent, Notice notice) {
+    public NoticeRecord(NoticeRecordId id, NoticeType noticeType, Boolean isSent, Notice notice) {
         this.id = id;
+        this.noticeType = noticeType;
         this.isSent = isSent;
         this.notice = notice;
     }
@@ -87,6 +93,7 @@ public class NoticeRecord {
         for (Sender sender : Sender.values()) {
             records.add(NoticeRecord.builder()
                     .id(new NoticeRecordId(dto.getNum(), sender))
+                    .noticeType(dto.getType())
                     .notice(Notice.builder().num(dto.getNum()).build())
                     .isSent(false)
                     .build());

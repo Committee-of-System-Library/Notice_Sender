@@ -1,6 +1,13 @@
 discord:
   urls:
     all: ${DISCORD_ALL}
+    student: ${DISCORD_STUDENT}
+    normal: ${DISCORD_NORMAL}
+    scholarship: ${DISCORD_SCHOLARSHIP}
+    sim-com: ${DISCORD_SIM_COM}
+    gl-sop: ${DISCORD_GL_SOP}
+    graduate: ${DISCORD_GRADUATE}
+
 
 server:
   port: ${PORT}

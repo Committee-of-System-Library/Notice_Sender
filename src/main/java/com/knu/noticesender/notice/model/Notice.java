@@ -5,6 +5,7 @@ import com.knu.noticesender.notice.utils.NoticeTypeConverter;
 import java.time.LocalDateTime;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -19,6 +20,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Notice {
     @Id
+    @GeneratedValue
+    private Long id;
+
     private Long num;
 
     private String link;

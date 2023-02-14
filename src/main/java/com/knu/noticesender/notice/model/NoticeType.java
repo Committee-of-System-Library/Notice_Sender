@@ -7,9 +7,9 @@ package com.knu.noticesender.notice.model;
  * @see NoticeRecord
  */
 public enum NoticeType implements Convertible {
-    NEW("0", "알림 레코드 생성 대기 공지사항"),
-    OLD("1", "알림 레코드 생성 완료 공지사항"),
-    UPDATE("2", "알림 레코드 재생성 대기 공지사항");
+    NEW("NEW", "알림 레코드 생성 대기 공지사항"),
+    UPDATE("UPDATE", "알림 레코드 재생성 대기 공지사항"),
+    OLD("OLD", "알림 레코드 생성 완료 공지사항");
 
     private final String dbData;
     private final String desc;

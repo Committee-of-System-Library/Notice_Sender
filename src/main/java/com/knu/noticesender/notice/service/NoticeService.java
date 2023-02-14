@@ -28,12 +28,14 @@ public class NoticeService {
     }
 
     /**
-     * 공지사항 알림 상태를 변경합니다
+     * 공지사항 데이터를 조회한 후의 동작을 명시합니다
+     *
+     * 1. 알림 상태를 변경합니다 NEW/UPDATE -> OLD
      */
     @Transactional
-    public void changeType(Long id, NoticeType type) {
+    public void postFindNotice(Long id) {
         Notice notice = noticeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Wrong Id"));
-        notice.changeType(type);
+        notice.changeType(NoticeType.OLD);
     }
 }

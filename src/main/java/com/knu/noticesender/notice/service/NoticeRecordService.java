@@ -39,7 +39,7 @@ public class NoticeRecordService {
     private void doGenerate(NoticeDto dto) {
         for (NoticeRecord record : NoticeRecord.createByNoticeDtoPerSender(dto)) {
             noticeRecordRepository.save(record);
-            noticeService.changeType(dto.getNum(), NoticeType.OLD);
+            noticeService.postFindNotice(dto.getNum());
         }
     }
 

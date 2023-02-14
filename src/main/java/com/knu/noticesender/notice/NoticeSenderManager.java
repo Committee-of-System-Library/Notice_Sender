@@ -49,16 +49,21 @@ public class NoticeSenderManager implements SenderManager {
     private void doSend(NoticeRecord record) {
         Sender sender = record.getId().getSender();
         Long noticeId = record.getId().getNoticeId();
-        NoticeDto dto = NoticeDto.ofEntity(record.getNotice());
         NoticeSender noticeSender = noticeSenderMapper.getNoticeSender(sender);
         try {
-            noticeSender.send(dto);
+            noticeSender.send(getNoticeDto(record));
             postSend(record);
         } catch (HttpClientErrorException e) {
             log.error(String.format("Sender[%s] Notice[%d] 발송 실패", sender, noticeId));
         } catch (Exception e) {
             log.error(String.format("Sender[%s] Notice[%d] 저장 실패", sender, noticeId));
         }
+    }
+
+    private static NoticeDto getNoticeDto(NoticeRecord record) {
+        NoticeDto dto = NoticeDto.ofEntity(record.getNotice());
+        dto.setType(record.getNoticeType());
+        return dto;
     }
 
     private void doSend(List<NoticeRecord> records) {

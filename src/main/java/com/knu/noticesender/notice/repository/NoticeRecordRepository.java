@@ -18,4 +18,5 @@ public interface NoticeRecordRepository extends JpaRepository<NoticeRecord, Noti
     List<NoticeRecord> findAllByIsSent(@Param("isSent")boolean isSent);
 
     List<NoticeRecord> findAllById_Sender(Sender sender);
+    List<NoticeRecord> findAllByIdSender(Sender sender);
 }
