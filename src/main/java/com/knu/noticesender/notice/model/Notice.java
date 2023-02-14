@@ -11,6 +11,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 서버 - 데이터베이스 간 공유하는 알림 데이터 클래스
+ */
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -21,7 +24,6 @@ public class Notice {
     private String link;
 
     private String title;
-
 
     private String content;
 
