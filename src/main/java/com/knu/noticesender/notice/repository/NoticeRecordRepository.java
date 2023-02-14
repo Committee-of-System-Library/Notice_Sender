@@ -2,6 +2,7 @@ package com.knu.noticesender.notice.repository;
 
 import com.knu.noticesender.notice.model.NoticeRecord;
 import com.knu.noticesender.notice.model.NoticeRecord.NoticeRecordId;
+import com.knu.noticesender.notice.model.Sender;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,4 +16,6 @@ public interface NoticeRecordRepository extends JpaRepository<NoticeRecord, Noti
      */
     @Query("select nr from NoticeRecord nr join fetch nr.notice where nr.isSent = :isSent")
     List<NoticeRecord> findAllByIsSent(@Param("isSent")boolean isSent);
+
+    List<NoticeRecord> findAllById_Sender(Sender sender);
 }
