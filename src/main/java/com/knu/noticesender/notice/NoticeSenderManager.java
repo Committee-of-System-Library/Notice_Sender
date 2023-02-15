@@ -1,8 +1,7 @@
 package com.knu.noticesender.notice;
 
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.knu.noticesender.notice.model.Sender;
@@ -19,11 +18,10 @@ import com.knu.noticesender.config.SenderConfig.NoticeSenderMapper;
  * @see NoticeSenderMapper
  * @see com.knu.noticesender.notice.model.Sender
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class NoticeSenderManager implements SenderManager {
-    Logger logger = LoggerFactory.getLogger(this.getClass());
-
     private final NoticeRecordService noticeRecordService;
     private final NoticeSenderMapper noticeSenderMapper;
 
@@ -57,9 +55,9 @@ public class NoticeSenderManager implements SenderManager {
             noticeSender.send(dto);
             postSend(record);
         } catch (HttpClientErrorException e) {
-            logger.error(String.format("Sender[%s] Notice[%d] 발송 실패", sender, noticeId));
+            log.error(String.format("Sender[%s] Notice[%d] 발송 실패", sender, noticeId));
         } catch (Exception e) {
-            logger.error(String.format("Sender[%s] Notice[%d] 저장 실패", sender, noticeId));
+            log.error(String.format("Sender[%s] Notice[%d] 저장 실패", sender, noticeId));
         }
     }
 
