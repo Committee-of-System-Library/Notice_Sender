@@ -1,7 +1,7 @@
 package com.knu.noticesender.notice.service;
 
+import com.knu.noticesender.notice.NoticeSenderManager;
 import com.knu.noticesender.notice.dto.NoticeDto;
-import com.knu.noticesender.notice.model.Notice;
 import com.knu.noticesender.notice.model.NoticeRecord;
 import com.knu.noticesender.notice.model.NoticeRecord.NoticeRecordId;
 import com.knu.noticesender.notice.model.NoticeType;
@@ -37,12 +37,7 @@ public class NoticeRecordService {
      * @param dto: 레코드에 저장할 알림 데이터
      */
     private void doGenerate(NoticeDto dto) {
-        for (Sender sender : Sender.values()) {
-            NoticeRecord record = NoticeRecord.builder()
-                    .id(new NoticeRecordId(dto.getNum(), sender))
-                    .notice(Notice.builder().num(dto.getNum()).build())
-                    .isSent(false)
-                    .build();
+        for (NoticeRecord record : NoticeRecord.createByNoticeDtoPerSender(dto)) {
             noticeRecordRepository.save(record);
             noticeService.changeType(dto.getNum(), NoticeType.OLD);
         }
@@ -55,6 +50,15 @@ public class NoticeRecordService {
         return noticeRecordRepository.findAllByIsSent(false);
     }
 
+    public List<NoticeRecord> findAllBySender(Sender sender) { return noticeRecordRepository.findAllById_Sender(sender); }
+
+    /**
+     * 처리된 레코드에 대한 후처리 작업을 명시합니다
+     * @param noticeRecordId: 처리된 레코드
+     *
+     * Ex) NoticeRecord 참조 후 처리 완료 호출
+     * @see NoticeSenderManager#sendAll()
+     */
     @Transactional
     public void process(NoticeRecordId noticeRecordId) {
         NoticeRecord record = noticeRecordRepository.findById(noticeRecordId)
