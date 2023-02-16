@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.knu.noticesender.notice.dto.NoticeDto;
 import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.knu.noticesender.config.CategoryUrlMapper;
+import com.knu.noticesender.config.DiscordConfig.CategoryUrlMapper;
 
 @Service
 @RequiredArgsConstructor
