@@ -1,6 +1,7 @@
 package com.knu.noticesender.notice;
 
 import com.knu.noticesender.notice.dto.discord.DiscordMessage;
+import com.knu.noticesender.notice.model.Category;
 import com.knu.noticesender.notice.utils.NoticeDiscordMessageConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -21,9 +22,13 @@ public class NoticeDiscordSender implements NoticeSender{
 
     @Override
     public void send(NoticeDto dto) {
+        doSend(new HttpEntity<>(createSendBody(dto), createSendHeaders()), Category.ALL);
+        doSend(new HttpEntity<>(createSendBody(dto), createSendHeaders()), dto.getCategory());
+    }
+
+    private void doSend(HttpEntity<String> request, Category category) {
         RestTemplate rest = new RestTemplate();
-        HttpEntity<String> request = new HttpEntity<>(createSendBody(dto), createSendHeaders());
-        rest.postForEntity(categoryUrlMapper.getUrl(dto.getCategory()), request, Object.class);
+        rest.postForEntity(categoryUrlMapper.getUrl(category), request, Object.class);
     }
 
     private HttpHeaders createSendHeaders() {
