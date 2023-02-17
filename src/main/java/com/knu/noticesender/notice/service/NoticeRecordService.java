@@ -1,5 +1,6 @@
 package com.knu.noticesender.notice.service;
 
+import java.util.List;
 import com.knu.noticesender.notice.NoticeSenderManager;
 import com.knu.noticesender.notice.dto.NoticeDto;
 import com.knu.noticesender.notice.model.NoticeRecord;
@@ -7,10 +8,9 @@ import com.knu.noticesender.notice.model.NoticeRecord.NoticeRecordId;
 import com.knu.noticesender.notice.model.NoticeType;
 import com.knu.noticesender.notice.model.Sender;
 import com.knu.noticesender.notice.repository.NoticeRecordRepository;
-import java.util.List;
-import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +39,7 @@ public class NoticeRecordService {
     private void doGenerate(NoticeDto dto) {
         for (NoticeRecord record : NoticeRecord.createByNoticeDtoPerSender(dto)) {
             noticeRecordRepository.save(record);
-            noticeService.changeType(dto.getNum(), NoticeType.OLD);
+            noticeService.postFindNotice(dto.getId());
         }
     }
 
