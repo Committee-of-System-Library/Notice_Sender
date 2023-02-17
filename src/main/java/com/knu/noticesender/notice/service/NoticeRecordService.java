@@ -37,10 +37,16 @@ public class NoticeRecordService {
      * @param dto: 레코드에 저장할 알림 데이터
      */
     private void doGenerate(NoticeDto dto) {
-        for (NoticeRecord record : NoticeRecord.createByNoticeDtoPerSender(dto)) {
-            noticeRecordRepository.save(record);
-            noticeService.postFindNotice(dto.getId());
-        }
+        noticeRecordRepository.saveAll(NoticeRecord.createByNoticeDtoPerSender(dto));
+        postGenerate(dto);
+    }
+
+    /**
+     * 알림 레코드 생성 후 알림 데이터의 상태를 OLD 로 변경한다
+     * @see NoticeType#OLD
+     */
+    private void postGenerate(NoticeDto dto) {
+        noticeService.changeType(dto.getId(), NoticeType.OLD);
     }
 
     /**
