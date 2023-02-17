@@ -23,6 +23,8 @@ public class DiscordConfig {
     private String glSopUrl;
     @Value("${discord.urls.graduate}")
     private String graduateUrl;
+    @Value("${discord.urls.graduate-contract}")
+    private String graduateContractUrl;
 
     @Bean
     public CategoryUrlMapper categoryURLMapper() {
@@ -34,6 +36,7 @@ public class DiscordConfig {
         urls.put(Category.SIM_COM, simComUrl);
         urls.put(Category.GL_SOP, glSopUrl);
         urls.put(Category.GRADUATE_SCHOOL, graduateUrl);
+        urls.put(Category.GRADUATE_CONTRACT, graduateContractUrl);
 
         return new CategoryUrlMapper(urls);
     }
