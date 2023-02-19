@@ -1,13 +1,13 @@
 package com.knu.noticesender.notice.service;
 
 import java.util.List;
-import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.knu.noticesender.notice.dto.NoticeDto;
 import com.knu.noticesender.notice.model.Notice;
 import com.knu.noticesender.notice.model.NoticeType;
 import com.knu.noticesender.notice.repository.NoticeRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor

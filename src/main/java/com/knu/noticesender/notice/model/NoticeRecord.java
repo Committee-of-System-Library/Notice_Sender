@@ -1,17 +1,22 @@
 package com.knu.noticesender.notice.model;
 
 import com.knu.noticesender.notice.dto.NoticeDto;
+import com.knu.noticesender.notice.utils.NoticeTypeConverter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
+import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
@@ -23,23 +28,34 @@ import lombok.NoArgsConstructor;
  */
 @Entity
 @Getter
+@Table(name = "NOTICE_RECORD")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class NoticeRecord {
     @EmbeddedId
     private NoticeRecordId id;
 
     /**
+     * Record 가 생성될 당시의 Notice 상태값
+     */
+    @Column(name = "notice_type")
+    @Convert(converter = NoticeTypeConverter.class)
+    private NoticeType noticeType;
+
+    /**
      * 알림 전송 여부
      */
+    @Column(name = "is_sent")
     private Boolean isSent;
 
     @MapsId("noticeId")
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(insertable = false, updatable = false)
     private Notice notice;
 
     @Builder
-    public NoticeRecord(NoticeRecordId id, Boolean isSent, Notice notice) {
+    public NoticeRecord(NoticeRecordId id, NoticeType noticeType, Boolean isSent, Notice notice) {
         this.id = id;
+        this.noticeType = noticeType;
         this.isSent = isSent;
         this.notice = notice;
     }
@@ -86,11 +102,17 @@ public class NoticeRecord {
 
         for (Sender sender : Sender.values()) {
             records.add(NoticeRecord.builder()
-                    .id(new NoticeRecordId(dto.getNum(), sender))
-                    .notice(Notice.builder().num(dto.getNum()).build())
+                    .id(new NoticeRecordId(dto.getId(), sender))
+                    .noticeType(dto.getType())
+                    .notice(Notice.builder().id(dto.getId()).build())
                     .isSent(false)
                     .build());
         }
         return records;
+    }
+
+    public Notice getNotice() {
+        this.notice.changeType(this.noticeType);
+        return this.notice;
     }
 }

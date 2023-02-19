@@ -1,6 +1,14 @@
 discord:
   urls:
     all: ${DISCORD_ALL}
+    student: ${DISCORD_STUDENT}
+    normal: ${DISCORD_NORMAL}
+    scholarship: ${DISCORD_SCHOLARSHIP}
+    sim-com: ${DISCORD_SIM_COM}
+    gl-sop: ${DISCORD_GL_SOP}
+    graduate: ${DISCORD_GRADUATE}
+    graduate-contract: ${DISCORD_GRADUATE_CONTRACT}
+
 
 server:
   port: ${PORT}
@@ -14,14 +22,15 @@ springdoc:
 
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: ${DB_URL}
+      username: ${DB_USERNAME}
+      password: ${DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
       hibernate:
         show_sql: true

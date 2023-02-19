@@ -1,5 +1,6 @@
 package com.knu.noticesender.notice.service;
 
+import java.util.List;
 import com.knu.noticesender.notice.NoticeSenderManager;
 import com.knu.noticesender.notice.dto.NoticeDto;
 import com.knu.noticesender.notice.model.NoticeRecord;
@@ -7,10 +8,9 @@ import com.knu.noticesender.notice.model.NoticeRecord.NoticeRecordId;
 import com.knu.noticesender.notice.model.NoticeType;
 import com.knu.noticesender.notice.model.Sender;
 import com.knu.noticesender.notice.repository.NoticeRecordRepository;
-import java.util.List;
-import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,10 +37,16 @@ public class NoticeRecordService {
      * @param dto: 레코드에 저장할 알림 데이터
      */
     private void doGenerate(NoticeDto dto) {
-        for (NoticeRecord record : NoticeRecord.createByNoticeDtoPerSender(dto)) {
-            noticeRecordRepository.save(record);
-            noticeService.changeType(dto.getNum(), NoticeType.OLD);
-        }
+        noticeRecordRepository.saveAll(NoticeRecord.createByNoticeDtoPerSender(dto));
+        postGenerate(dto);
+    }
+
+    /**
+     * 알림 레코드 생성 후 알림 데이터의 상태를 OLD 로 변경한다
+     * @see NoticeType#OLD
+     */
+    private void postGenerate(NoticeDto dto) {
+        noticeService.changeType(dto.getId(), NoticeType.OLD);
     }
 
     /**

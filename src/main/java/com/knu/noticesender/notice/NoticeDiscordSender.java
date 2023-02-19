@@ -1,6 +1,7 @@
 package com.knu.noticesender.notice;
 
 import com.knu.noticesender.notice.dto.discord.DiscordMessage;
+import com.knu.noticesender.notice.model.Category;
 import com.knu.noticesender.notice.utils.NoticeDiscordMessageConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Service;
 import com.knu.noticesender.notice.dto.NoticeDto;
 import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.knu.noticesender.config.CategoryUrlMapper;
+import com.knu.noticesender.config.DiscordConfig.CategoryUrlMapper;
 
 @Service
 @RequiredArgsConstructor
@@ -21,9 +22,13 @@ public class NoticeDiscordSender implements NoticeSender{
 
     @Override
     public void send(NoticeDto dto) {
+        doSend(new HttpEntity<>(createSendBody(dto), createSendHeaders()), Category.ALL);
+        doSend(new HttpEntity<>(createSendBody(dto), createSendHeaders()), dto.getCategory());
+    }
+
+    private void doSend(HttpEntity<String> request, Category category) {
         RestTemplate rest = new RestTemplate();
-        HttpEntity<String> request = new HttpEntity<>(createSendBody(dto), createSendHeaders());
-        rest.postForEntity(categoryUrlMapper.getUrl(dto.getCategory()), request, Object.class);
+        rest.postForEntity(categoryUrlMapper.getUrl(category), request, Object.class);
     }
 
     private HttpHeaders createSendHeaders() {
