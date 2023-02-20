@@ -10,10 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+
+import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -66,6 +64,13 @@ public class Notice {
         this.createdDate = createdDate;
         this.category = category;
         this.type = type;
+    }
+
+    public void setUpdatedData(String title, String content, Category category){
+        this.title = title;
+        this.content = content;
+        this.category = category;
+        this.type = NoticeType.UPDATE;
     }
 
     public void changeType(NoticeType type) {
