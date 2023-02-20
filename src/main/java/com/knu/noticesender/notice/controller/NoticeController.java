@@ -20,6 +20,7 @@ public class NoticeController {
 
     @PostMapping
     void saveOrUpdateNotices(@RequestBody @Valid Result<List<NoticeSaveReqDto>> data) {
+        log.info("[공지 크롤링 요청] {}개의 요청을 처리합니다.", data.getData().size());
         noticeSaveService.saveOrUpdateNotices(data);
     }
 
