@@ -19,7 +19,7 @@ public class NoticeController {
     final NoticeSaveService noticeSaveService;
 
     @PostMapping
-    void saveNotice(@RequestBody @Valid Result<List<NoticeSaveReqDto>> data) {
+    void saveOrUpdateNotices(@RequestBody @Valid Result<List<NoticeSaveReqDto>> data) {
         noticeSaveService.saveOrUpdateNotices(data);
     }
 
