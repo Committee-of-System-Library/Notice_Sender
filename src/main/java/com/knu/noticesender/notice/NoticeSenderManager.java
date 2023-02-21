@@ -55,9 +55,9 @@ public class NoticeSenderManager implements SenderManager {
             noticeSender.send(dto);
             postSend(record);
         } catch (HttpClientErrorException e) {
-            log.error(String.format("Sender[%s] Notice[%d] 발송 실패", sender, noticeId));
+            log.error(String.format("Sender[%s] Notice[%d] 발송 실패", sender, noticeId), e);
         } catch (Exception e) {
-            log.error(String.format("Sender[%s] Notice[%d] 저장 실패", sender, noticeId));
+            log.error(String.format("Sender[%s] Notice[%d] 저장 실패", sender, noticeId), e);
         }
     }
 
