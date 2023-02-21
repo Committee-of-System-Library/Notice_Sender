@@ -2,6 +2,7 @@ package com.knu.noticesender.notice.controller;
 
 import com.knu.noticesender.core.dto.Result;
 import com.knu.noticesender.notice.dto.NoticeSaveReqDto;
+import com.knu.noticesender.notice.service.NoticeProcessService;
 import com.knu.noticesender.notice.service.NoticeSaveService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,12 +19,11 @@ import java.util.List;
 @RequestMapping("/notice")
 @RequiredArgsConstructor
 public class NoticeController {
-    final NoticeSaveService noticeSaveService;
+    final NoticeProcessService noticeProcessService;
 
     @PostMapping
     void saveOrUpdateNotices(@RequestBody @Valid Result<List<NoticeSaveReqDto>> data) {
         log.info("[공지 크롤링 요청] {}개의 요청을 처리합니다.", data.getData().size());
-        noticeSaveService.saveOrUpdateNotices(data);
+        noticeProcessService.saveAndSendNotices(data);
     }
-
 }
