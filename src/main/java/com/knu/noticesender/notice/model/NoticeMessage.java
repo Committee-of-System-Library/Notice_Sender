@@ -1,6 +1,7 @@
 package com.knu.noticesender.notice.model;
 
 import com.knu.noticesender.core.model.BaseEntity;
+import com.knu.noticesender.notice.utils.NoticeTypeConverter;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,6 +26,10 @@ public class NoticeMessage extends BaseEntity {
     @Column(name = "is_recorded")
     private boolean isRecorded;
 
+    @Column(name = "notice_status")
+    @Convert(converter = NoticeTypeConverter.class)
+    private NoticeType noticeType;
+
     @Builder
     public NoticeMessage(Long id, Notice notice, boolean isRecorded) {
         this.id = id;
@@ -34,5 +39,8 @@ public class NoticeMessage extends BaseEntity {
 
     public NoticeMessage(Notice notice) {
         this.notice = notice;
+        this.noticeType = notice.getType();
+    }
+
     }
 }
