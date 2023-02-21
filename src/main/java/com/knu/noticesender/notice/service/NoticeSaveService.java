@@ -51,7 +51,7 @@ public class NoticeSaveService {
                 .filter(dto -> noticeRepository.notExistsByNum(dto.getNum()))
                 .map(NoticeSaveReqDto::toEntity)
                 .collect(Collectors.toList());
-        log.info("[공지 크롤링 요청] {} 개의 공지를 저장했습니다.", notices.size());
+        log.info("[공지 크롤링 요청] {} 개의 공지를 저장합니다.", notices.size());
         noticeRepository.saveAll(notices);
     }
 
