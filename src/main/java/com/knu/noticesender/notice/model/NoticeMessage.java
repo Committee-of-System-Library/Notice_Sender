@@ -42,5 +42,7 @@ public class NoticeMessage extends BaseEntity {
         this.noticeType = notice.getType();
     }
 
+    public void setIsRecorded(boolean isRecorded) {
+        this.isRecorded = isRecorded;
     }
 }
