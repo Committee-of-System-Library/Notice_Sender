@@ -35,6 +35,9 @@ dependencies {
 //    Spring Web
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
+// Spring validation
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
+
 //    DevTools
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
