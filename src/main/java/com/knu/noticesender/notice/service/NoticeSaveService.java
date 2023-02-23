@@ -1,16 +1,17 @@
 package com.knu.noticesender.notice.service;
 
 import com.knu.noticesender.core.dto.Result;
-import com.knu.noticesender.notice.dto.NoticeDto;
 import com.knu.noticesender.notice.dto.NoticeSaveReqDto;
 import com.knu.noticesender.notice.model.Notice;
-import com.knu.noticesender.notice.model.NoticeType;
+import com.knu.noticesender.notice.model.NoticeMessage;
+import com.knu.noticesender.notice.repository.NoticeMessageRepository;
 import com.knu.noticesender.notice.repository.NoticeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -21,8 +22,7 @@ import java.util.stream.Collectors;
 public class NoticeSaveService {
 
     private final NoticeRepository noticeRepository;
-    private final NoticeRecordService noticeRecordService;
-
+    private final NoticeMessageRepository noticeMessageRepository;
     /**
      * 공지사항 크롤링 데이터 저장 요청을 받아,
      * 저장 또는 변경사항이 있을 시 업데이트가 수행됩니다
@@ -32,27 +32,36 @@ public class NoticeSaveService {
      */
     @Transactional
     public void saveOrUpdateNotices(Result<List<NoticeSaveReqDto>> data) {
-        saveNoticesIfNotExists(data);
-        updateNoticesWithCondition(data);
-        noticeRecordService.generateRecord();
+        List<Notice> notices = saveNoticesIfNotExists(data);
+        notices.addAll(updateNoticesWithCondition(data));
 
+        saveNoticeMessages(notices);
     }
 
-    private void updateNoticesWithCondition(Result<List<NoticeSaveReqDto>> data) {
-        data.getData().stream()
+    private List<Notice> updateNoticesWithCondition(Result<List<NoticeSaveReqDto>> data) {
+        return data.getData().stream()
                 .filter(dto -> noticeRepository.existsByNum(dto.getNum()))
                 .filter(this::isUpdatedNotice)
                 .peek(dto -> log.info("[공지 크롤링 요청] 공지 업데이트 num: {}, category: {}", dto.getNum(), dto.getCategory()))
-                .forEach(this::updateNotice);
+                .map(this::updateAndGetNotice)
+                .collect(Collectors.toList());
+
     }
 
-    private void saveNoticesIfNotExists(Result<List<NoticeSaveReqDto>> data) {
+    private List<Notice> saveNoticesIfNotExists(Result<List<NoticeSaveReqDto>> data) {
         List<Notice> notices = data.getData().stream()
                 .filter(dto -> noticeRepository.notExistsByNum(dto.getNum()))
                 .map(NoticeSaveReqDto::toEntity)
                 .collect(Collectors.toList());
         log.info("[공지 크롤링 요청] {} 개의 공지를 저장합니다.", notices.size());
-        noticeRepository.saveAll(notices);
+
+        return noticeRepository.saveAll(notices);
+    }
+
+    private void saveNoticeMessages(List<Notice> notices) {
+        List<NoticeMessage> noticeMessages = new ArrayList<>();
+        notices.forEach(notice -> noticeMessages.add(new NoticeMessage(notice)));
+        noticeMessageRepository.saveAll(noticeMessages);
     }
 
     private boolean isUpdatedNotice(NoticeSaveReqDto dto) {
@@ -63,8 +72,9 @@ public class NoticeSaveService {
                 || !Objects.equals(notice.getContent(), dto.getContent());
     }
 
-    private void updateNotice(NoticeSaveReqDto dto) {
+    private Notice updateAndGetNotice(NoticeSaveReqDto dto) {
         Notice notice = noticeRepository.findByNum(dto.getNum()).orElseThrow(RuntimeException::new);
         notice.setUpdatedData(dto.getTitle(), dto.getContent(), dto.getCategory());
+        return notice;
     }
 }
