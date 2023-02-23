@@ -1,7 +1,6 @@
 package com.knu.noticesender.notice.service;
 
 import com.knu.noticesender.notice.dto.NoticeDto;
-import com.knu.noticesender.notice.dto.NoticeMessageDto;
 import com.knu.noticesender.notice.model.Notice;
 import com.knu.noticesender.notice.model.NoticeMessage;
 import com.knu.noticesender.notice.repository.NoticeMessageRepository;
