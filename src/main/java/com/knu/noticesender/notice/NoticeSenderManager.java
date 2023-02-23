@@ -26,7 +26,7 @@ public class NoticeSenderManager implements SenderManager {
     private final NoticeSenderMapper noticeSenderMapper;
 
     /**
-     * 미발송 알림 전송
+     * 미발송 알림을 모두 전송합니다.
      */
     public void sendAll() {
         doSend(noticeRecordService.findAllNotSent());

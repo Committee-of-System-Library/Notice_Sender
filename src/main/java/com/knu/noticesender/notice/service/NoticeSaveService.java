@@ -23,12 +23,14 @@ public class NoticeSaveService {
 
     private final NoticeRepository noticeRepository;
     private final NoticeMessageRepository noticeMessageRepository;
+
     /**
      * 공지사항 크롤링 데이터 저장 요청을 받아,
      * 저장 또는 변경사항이 있을 시 업데이트가 수행됩니다
      *
+     * 현재는 저장 후 message 를 NOTICE_MESSAGE 테이블에 적재하고 있습니다
+     *
      * @param data: 공지사항 크롤링 데이터 리스트를 감싼 객체
-     * @see NoticeSaveReqDto
      */
     @Transactional
     public void saveOrUpdateNotices(Result<List<NoticeSaveReqDto>> data) {

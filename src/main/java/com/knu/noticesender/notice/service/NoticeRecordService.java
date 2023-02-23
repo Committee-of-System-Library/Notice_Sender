@@ -21,9 +21,7 @@ public class NoticeRecordService {
     private final NoticeMessageService noticeMessageService;
 
     /**
-     * 새로 생성되거나, 업데이트된 알림 데이터를 레코드로 추가
-     * @see NoticeRecord
-     * @see NoticeRecord
+     * 저장된 공지에 대한 메세지를 조회하여 플랫폼 별 레코드를 생성합니다
      */
     @Transactional
     public void generateRecord() {
