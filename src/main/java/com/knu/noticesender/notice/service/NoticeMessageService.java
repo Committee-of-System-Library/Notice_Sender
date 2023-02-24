@@ -18,6 +18,11 @@ public class NoticeMessageService {
 
     private final NoticeMessageRepository noticeMessageRepository;
 
+    /**
+     * record 테이블에 저장되지 않은 모든 notice를 가져온다
+     *
+     * @return Notice dto 리스트 - notice 데이터이나 읽기 전용임
+     */
     public List<NoticeDto> findAllUnrecordedNotices() {
         List<NoticeMessage> noticeMessages = noticeMessageRepository.findAllByIsRecorded(false);
 
@@ -25,6 +30,12 @@ public class NoticeMessageService {
                 .map(noticeMessage -> NoticeDto.ofEntity(noticeMessage.getNotice()))
                 .collect(Collectors.toList());
     }
+
+    /**
+     * 레코드에 저장 후에 메세지의 isRecorded 필드를 True로 만든다
+     *
+     * @param noticeDto notice 읽기 전용 데이터
+     */
 
     public void setIsRecordedOfMessageTrue(NoticeDto noticeDto) {
         NoticeMessage noticeMessage = noticeMessageRepository.findByNotice(Notice.builder().id(noticeDto.getId()).build())
