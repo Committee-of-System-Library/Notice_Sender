@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping("/notice")
 @RequiredArgsConstructor
 public class NoticeController {
-    final NoticeProcessService noticeProcessService;
+    private final NoticeProcessService noticeProcessService;
 
     @PostMapping
     void saveOrUpdateNotices(@RequestBody @Valid Result<List<NoticeSaveReqDto>> data) {
