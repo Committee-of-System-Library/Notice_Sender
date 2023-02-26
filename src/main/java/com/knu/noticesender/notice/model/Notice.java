@@ -70,7 +70,7 @@ public class Notice {
         this.type = type;
     }
 
-    public void setUpdatedData(String title, String content, Category category){
+    public void setUpdatedData(String title, String content, Category category) {
         this.title = title;
         this.content = content;
         this.category = category;
