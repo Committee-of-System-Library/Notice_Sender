@@ -9,6 +9,7 @@ import lombok.Getter;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Getter
 public class NoticeSaveReqDto {
@@ -42,5 +43,11 @@ public class NoticeSaveReqDto {
                 .content(dto.getContent())
                 .createdDate(dto.getCreatedDate())
                 .build();
+    }
+
+    public boolean isDifferentWith(Notice notice) {
+        return !Objects.equals(notice.getTitle(), this.title)
+                || !Objects.equals(notice.getCategory(), this.category)
+                || !Objects.equals(notice.getContent(), this.content);
     }
 }

@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -68,10 +67,7 @@ public class NoticeSaveService {
 
     private boolean isUpdatedNotice(NoticeSaveReqDto dto) {
         Notice notice = noticeRepository.findByNum(dto.getNum()).orElseThrow(RuntimeException::new);
-
-        return !Objects.equals(notice.getTitle(), dto.getTitle())
-                || !Objects.equals(notice.getCategory(), dto.getCategory())
-                || !Objects.equals(notice.getContent(), dto.getContent());
+        return dto.isDifferentWith(notice);
     }
 
     private Notice updateAndGetNotice(NoticeSaveReqDto dto) {
