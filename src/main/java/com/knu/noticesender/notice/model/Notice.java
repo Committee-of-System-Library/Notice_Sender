@@ -80,4 +80,10 @@ public class Notice {
     public void changeType(NoticeType type) {
         this.type = type;
     }
+
+    public static Notice createNoticeFromId(Long id) {
+        return Notice.builder()
+                .id(id)
+                .build();
+    }
 }

@@ -38,7 +38,7 @@ public class NoticeMessageService {
      */
 
     public void setIsRecordedOfMessageTrue(NoticeDto noticeDto) {
-        NoticeMessage noticeMessage = noticeMessageRepository.findByNotice(Notice.builder().id(noticeDto.getId()).build())
+        NoticeMessage noticeMessage = noticeMessageRepository.findByNotice(Notice.createNoticeFromId(noticeDto.getId()))
                 .orElseThrow(() -> new RuntimeException("공지가 존재하지 않습니다"));
         noticeMessage.setIsRecorded(true);
     }
