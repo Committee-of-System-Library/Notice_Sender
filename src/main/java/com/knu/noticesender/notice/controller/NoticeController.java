@@ -3,7 +3,6 @@ package com.knu.noticesender.notice.controller;
 import com.knu.noticesender.core.dto.Result;
 import com.knu.noticesender.notice.dto.NoticeSaveReqDto;
 import com.knu.noticesender.notice.service.NoticeProcessService;
-import com.knu.noticesender.notice.service.NoticeSaveService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
