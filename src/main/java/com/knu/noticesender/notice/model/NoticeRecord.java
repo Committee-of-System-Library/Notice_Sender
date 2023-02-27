@@ -110,9 +110,4 @@ public class NoticeRecord {
         }
         return records;
     }
-
-    public Notice getNotice() {
-        this.notice.changeType(this.noticeType);
-        return this.notice;
-    }
 }

@@ -9,7 +9,6 @@ discord:
     graduate: ${DISCORD_GRADUATE}
     graduate-contract: ${DISCORD_GRADUATE_CONTRACT}
 
-
 server:
   port: ${PORT}
 
@@ -22,10 +21,10 @@ springdoc:
 
 spring:
   datasource:
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      url: ${DB_URL}
-      username: ${DB_USERNAME}
-      password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto:

@@ -10,10 +10,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+
+import lombok.*;
+import org.hibernate.annotations.Comment;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
 
 /**
  * 서버 - 데이터베이스 간 공유하는 알림 데이터 클래스
@@ -36,7 +37,18 @@ public class Notice {
     private String content;
 
     @Column(name = "created_at")
+    @Comment("공지가 실제 생성된 날짜")
     private LocalDateTime createdDate;
+
+    @Column(name = "saved_at")
+    @Comment("DB에 공지가 저장된 시각")
+    @CreatedDate
+    private LocalDateTime savedAt;
+
+    @Column(name = "updated_at")
+    @Comment("DB에 공지가 업데이트 된 시각")
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
     @Convert(converter = CategoryConverter.class)
     private Category category;
@@ -58,7 +70,20 @@ public class Notice {
         this.type = type;
     }
 
+    public void setUpdatedData(String title, String content, Category category) {
+        this.title = title;
+        this.content = content;
+        this.category = category;
+        this.type = NoticeType.UPDATE;
+    }
+
     public void changeType(NoticeType type) {
         this.type = type;
+    }
+
+    public static Notice createNoticeFromId(Long id) {
+        return Notice.builder()
+                .id(id)
+                .build();
     }
 }

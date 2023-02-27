@@ -3,10 +3,12 @@ package com.knu.noticesender.notice.service;
 import java.util.List;
 import com.knu.noticesender.notice.NoticeSenderManager;
 import com.knu.noticesender.notice.dto.NoticeDto;
+import com.knu.noticesender.notice.model.Notice;
 import com.knu.noticesender.notice.model.NoticeRecord;
 import com.knu.noticesender.notice.model.NoticeRecord.NoticeRecordId;
 import com.knu.noticesender.notice.model.NoticeType;
 import com.knu.noticesender.notice.model.Sender;
+import com.knu.noticesender.notice.repository.NoticeMessageRepository;
 import com.knu.noticesender.notice.repository.NoticeRecordRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,16 +18,14 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class NoticeRecordService {
     private final NoticeRecordRepository noticeRecordRepository;
-    private final NoticeService noticeService;
+    private final NoticeMessageService noticeMessageService;
 
     /**
-     * 새로 생성되거나, 업데이트된 알림 데이터를 레코드로 추가
-     * @see NoticeRecord
+     * 저장된 공지에 대한 메세지를 조회하여 플랫폼 별 레코드를 생성합니다
      */
     @Transactional
     public void generateRecord() {
-        doGenerate(noticeService.findAllByType(NoticeType.NEW));
-        doGenerate(noticeService.findAllByType(NoticeType.UPDATE));
+        doGenerate(noticeMessageService.findAllUnrecordedNotices());
     }
 
     private void doGenerate(List<NoticeDto> newNotices) {
@@ -38,15 +38,8 @@ public class NoticeRecordService {
      */
     private void doGenerate(NoticeDto dto) {
         noticeRecordRepository.saveAll(NoticeRecord.createByNoticeDtoPerSender(dto));
-        postGenerate(dto);
-    }
 
-    /**
-     * 알림 레코드 생성 후 알림 데이터의 상태를 OLD 로 변경한다
-     * @see NoticeType#OLD
-     */
-    private void postGenerate(NoticeDto dto) {
-        noticeService.changeType(dto.getId(), NoticeType.OLD);
+        noticeMessageService.setIsRecordedOfMessageTrue(dto);
     }
 
     /**
