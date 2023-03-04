@@ -10,12 +10,12 @@ import lombok.Data;
 public class NoticeMessageDto {
 
     private Long id;
-    private Notice notice;
+    private NoticeDto notice;
     private boolean isRecorded;
     private NoticeType noticeType;
 
     @Builder
-    public NoticeMessageDto(Long id, Notice notice, boolean isRecorded, NoticeType noticeType) {
+    public NoticeMessageDto(Long id, NoticeDto notice, boolean isRecorded, NoticeType noticeType) {
         this.id = id;
         this.notice = notice;
         this.isRecorded = isRecorded;
@@ -26,7 +26,7 @@ public class NoticeMessageDto {
 
         return NoticeMessageDto.builder()
                 .id(noticeMessage.getId())
-                .notice(noticeMessage.getNotice())
+                .notice(NoticeDto.ofEntity(noticeMessage.getNotice()))
                 .isRecorded(noticeMessage.isRecorded())
                 .noticeType(noticeMessage.getNoticeType())
                 .build();
