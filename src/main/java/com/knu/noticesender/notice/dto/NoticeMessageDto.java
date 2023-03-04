@@ -22,12 +22,14 @@ public class NoticeMessageDto {
     }
 
     public static NoticeMessageDto fromEntity(NoticeMessage noticeMessage) {
-
-        return NoticeMessageDto.builder()
+        NoticeMessageDto noticeMessageDto = NoticeMessageDto.builder()
                 .id(noticeMessage.getId())
                 .noticeDto(NoticeDto.ofEntity(noticeMessage.getNotice()))
                 .isRecorded(noticeMessage.isRecorded())
                 .noticeType(noticeMessage.getNoticeType())
                 .build();
+        
+        noticeMessageDto.getNoticeDto().setType(noticeMessage.getNoticeType());
+        return noticeMessageDto;
     }
 }
