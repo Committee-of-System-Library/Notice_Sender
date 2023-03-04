@@ -3,12 +3,11 @@ package com.knu.noticesender.notice.service;
 import java.util.List;
 import com.knu.noticesender.notice.NoticeSenderManager;
 import com.knu.noticesender.notice.dto.NoticeDto;
-import com.knu.noticesender.notice.model.Notice;
+import com.knu.noticesender.notice.dto.NoticeMessageDto;
+import com.knu.noticesender.notice.model.NoticeMessage;
 import com.knu.noticesender.notice.model.NoticeRecord;
 import com.knu.noticesender.notice.model.NoticeRecord.NoticeRecordId;
-import com.knu.noticesender.notice.model.NoticeType;
 import com.knu.noticesender.notice.model.Sender;
-import com.knu.noticesender.notice.repository.NoticeMessageRepository;
 import com.knu.noticesender.notice.repository.NoticeRecordRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,11 +24,11 @@ public class NoticeRecordService {
      */
     @Transactional
     public void generateRecord() {
-        doGenerate(noticeMessageService.findAllUnrecordedNotices());
-    }
-
-    private void doGenerate(List<NoticeDto> newNotices) {
-        newNotices.forEach(this::doGenerate);
+        List<NoticeMessageDto> noticeMessageDtos = noticeMessageService.findAllUnrecordedNoticeMessages();
+        noticeMessageDtos.forEach(noticeMessageDto -> {
+            doGenerate(noticeMessageDto.getNoticeDto());
+            noticeMessageService.setIsRecordedTrue(noticeMessageDto);
+        });
     }
 
     /**
@@ -38,8 +37,6 @@ public class NoticeRecordService {
      */
     private void doGenerate(NoticeDto dto) {
         noticeRecordRepository.saveAll(NoticeRecord.createByNoticeDtoPerSender(dto));
-
-        noticeMessageService.setIsRecordedOfMessageTrue(dto);
     }
 
     /**
