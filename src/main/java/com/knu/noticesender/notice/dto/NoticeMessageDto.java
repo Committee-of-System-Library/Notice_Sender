@@ -1,6 +1,5 @@
 package com.knu.noticesender.notice.dto;
 
-import com.knu.noticesender.notice.model.Notice;
 import com.knu.noticesender.notice.model.NoticeMessage;
 import com.knu.noticesender.notice.model.NoticeType;
 import lombok.Builder;
@@ -10,14 +9,14 @@ import lombok.Data;
 public class NoticeMessageDto {
 
     private Long id;
-    private NoticeDto notice;
+    private NoticeDto noticeDto;
     private boolean isRecorded;
     private NoticeType noticeType;
 
     @Builder
-    public NoticeMessageDto(Long id, NoticeDto notice, boolean isRecorded, NoticeType noticeType) {
+    public NoticeMessageDto(Long id, NoticeDto noticeDto, boolean isRecorded, NoticeType noticeType) {
         this.id = id;
-        this.notice = notice;
+        this.noticeDto = noticeDto;
         this.isRecorded = isRecorded;
         this.noticeType = noticeType;
     }
@@ -26,7 +25,7 @@ public class NoticeMessageDto {
 
         return NoticeMessageDto.builder()
                 .id(noticeMessage.getId())
-                .notice(NoticeDto.ofEntity(noticeMessage.getNotice()))
+                .noticeDto(NoticeDto.ofEntity(noticeMessage.getNotice()))
                 .isRecorded(noticeMessage.isRecorded())
                 .noticeType(noticeMessage.getNoticeType())
                 .build();
