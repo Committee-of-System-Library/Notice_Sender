@@ -33,3 +33,9 @@ spring:
     properties:
       hibernate:
         show_sql: false
+
+logging:
+  level:
+    root: ${LOGGING_LEVEL_ROOT}
+  config:
+    path: ${LOGGING_PATH}
