@@ -44,13 +44,22 @@ public class LoggingFilter extends OncePerRequestFilter {
         MDC.clear();
     }
 
+    /**
+     * Request Wrapper Class 사용 시 Multipart Form Data 의 getParts() 가 호출되지 않는 문제 발생
+     * 따라서 Multipart Form Data 가 전송될 경우 강제로 getParts() 를 호출해 데이터를 초기화
+     */
     private static void initRequestPartsIfMultipartFormData(HttpServletRequest request) throws IOException, ServletException {
-        MediaType mediaType = MediaType.valueOf(request.getContentType() == null ? "application/json" : request.getContentType());
-        String type = mediaType.getType() + "/" + mediaType.getSubtype();
-
-        if (type.equals(MediaType.MULTIPART_FORM_DATA_VALUE)) {
+        if (getMediaTypeValue(request).equals(MediaType.MULTIPART_FORM_DATA_VALUE)) {
             request.getParts();
         }
+    }
+
+    /**
+     * HTTP Request 로 전송된 데이터의 ContentType(MediaType) 의 String 데이터를 반환
+     */
+    private static String getMediaTypeValue(HttpServletRequest request) {
+        MediaType mediaType = MediaType.valueOf(request.getContentType() == null ? MediaType.APPLICATION_JSON_VALUE : request.getContentType());
+        return mediaType.getType() + "/" + mediaType.getSubtype();
     }
 
     protected void doFilterWrapped(RequestWrapper request, ContentCachingResponseWrapper response, FilterChain filterChain) throws ServletException, IOException {
