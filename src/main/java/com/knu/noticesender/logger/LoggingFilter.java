@@ -82,14 +82,15 @@ public class LoggingFilter extends OncePerRequestFilter {
 
     private static void logPayload(String prefix, String contentType, InputStream inputStream) throws IOException {
         boolean visible = isVisible(MediaType.valueOf(contentType == null ? "application/json" : contentType));
-        if (visible) {
-            byte[] content = StreamUtils.copyToByteArray(inputStream);
-            if (content.length > 0) {
-                String contentString = new String(content).replace("\n", "").replaceAll(" ", "");
-                log.info("{} Payload: {}", prefix, contentString);
-            }
-        } else {
+        if (!visible) {
             log.info("{} Payload: Binary Content", prefix);
+            return;
+        }
+
+        byte[] content = StreamUtils.copyToByteArray(inputStream);
+        if (content.length > 0) {
+            String contentString = new String(content).replace("\n", "").replaceAll(" ", "");
+            log.info("{} Payload: {}", prefix, contentString);
         }
     }
 
