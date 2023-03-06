@@ -49,17 +49,17 @@ public class LoggingFilter extends OncePerRequestFilter {
      * 따라서 Multipart Form Data 가 전송될 경우 강제로 getParts() 를 호출해 데이터를 초기화
      */
     private static void initRequestPartsIfMultipartFormData(HttpServletRequest request) throws IOException, ServletException {
-        if (getMediaTypeValue(request).equals(MediaType.MULTIPART_FORM_DATA_VALUE)) {
+        if (getMediaType(request.getContentType()).equals(MediaType.MULTIPART_FORM_DATA)) {
             request.getParts();
         }
     }
 
     /**
-     * HTTP Request 로 전송된 데이터의 ContentType(MediaType) 의 String 데이터를 반환
+     * ContentType 데이터를 바탕으로 MediaType 객체 반환
+     * Default MediaType 은 application/json
      */
-    private static String getMediaTypeValue(HttpServletRequest request) {
-        MediaType mediaType = MediaType.valueOf(request.getContentType() == null ? MediaType.APPLICATION_JSON_VALUE : request.getContentType());
-        return mediaType.getType() + "/" + mediaType.getSubtype();
+    private static MediaType getMediaType(String contentType) {
+        return MediaType.valueOf(contentType == null ? MediaType.APPLICATION_JSON_VALUE : contentType);
     }
 
     protected void doFilterWrapped(RequestWrapper request, ContentCachingResponseWrapper response, FilterChain filterChain) throws ServletException, IOException {
@@ -90,7 +90,7 @@ public class LoggingFilter extends OncePerRequestFilter {
     }
 
     private static void logPayload(String prefix, String contentType, InputStream inputStream) throws IOException {
-        boolean visible = isVisible(MediaType.valueOf(contentType == null ? "application/json" : contentType));
+        boolean visible = isVisible(getMediaType(contentType));
         if (!visible) {
             log.info("{} Payload: Binary Content", prefix);
             return;
