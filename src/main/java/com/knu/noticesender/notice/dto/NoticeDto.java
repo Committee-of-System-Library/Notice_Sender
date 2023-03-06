@@ -13,6 +13,8 @@ import lombok.Data;
 @Data
 public class NoticeDto {
     @NotNull
+    private Long id;
+    @NotNull
     private Long num;
     @NotNull
     private Category category;
@@ -24,8 +26,9 @@ public class NoticeDto {
     private LocalDateTime createdDate;
 
     @Builder
-    public NoticeDto(Long num, Category category, NoticeType type, String link, String title, String content,
+    public NoticeDto(Long id, Long num, Category category, NoticeType type, String link, String title, String content,
                      LocalDateTime createdDate) {
+        this.id = id;
         this.num = num;
         this.category = category;
         this.type = type;
@@ -36,6 +39,7 @@ public class NoticeDto {
     }
 
     private NoticeDto(Notice notice) {
+        this.id = notice.getId();
         this.num = notice.getNum();
         this.category = notice.getCategory();
         this.type = notice.getType();
@@ -47,5 +51,9 @@ public class NoticeDto {
 
     public static List<NoticeDto> fromList(List<Notice> notices) {
         return notices.stream().map(NoticeDto::new).collect(Collectors.toList());
+    }
+
+    public static NoticeDto ofEntity(Notice notice) {
+        return new NoticeDto(notice);
     }
 }

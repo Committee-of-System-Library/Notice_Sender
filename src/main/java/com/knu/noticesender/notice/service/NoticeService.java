@@ -1,12 +1,13 @@
 package com.knu.noticesender.notice.service;
 
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import com.knu.noticesender.notice.dto.NoticeDto;
 import com.knu.noticesender.notice.model.Notice;
 import com.knu.noticesender.notice.model.NoticeType;
 import com.knu.noticesender.notice.repository.NoticeRepository;
-import java.util.List;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,5 +25,15 @@ public class NoticeService {
     public List<NoticeDto> findAllByType(NoticeType type) {
         List<Notice> result = noticeRepository.findAllByType(type);
         return NoticeDto.fromList(result);
+    }
+
+    /**
+     * 공지사항 알림 상태를 변경합니다
+     */
+    @Transactional
+    public void changeType(Long id, NoticeType type) {
+        Notice notice = noticeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Wrong Id"));
+        notice.changeType(type);
     }
 }

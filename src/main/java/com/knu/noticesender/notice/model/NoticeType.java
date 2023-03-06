@@ -1,14 +1,14 @@
 package com.knu.noticesender.notice.model;
 
 /**
- * NEW: 알림 발송 대기 공지사항
- * UPDATE: 업데이트된 공지사항
- * OLD: 알림 발송 완료 공지사항
+ * Notice 업로드 상태를 저장하는 열거형 클래스
+ *
+ * Usage) NoticeRecord 생성 시 참고 데이터
+ * @see NoticeRecord
  */
 public enum NoticeType implements Convertible {
-    NEW("", "발송 대기 공지사항"),
-    UPDATE("", "업데이트된 공지사항"),
-    OLD("", "발송 완료 공지사항");
+    NEW("NEW", "알림 레코드 생성 대기 공지사항"),
+    UPDATE("UPDATE", "알림 레코드 재생성 대기 공지사항");
 
     private final String dbData;
     private final String desc;
