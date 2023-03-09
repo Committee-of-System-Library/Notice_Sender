@@ -32,11 +32,24 @@ public class NoticeSaveService {
      * @param data: 공지사항 크롤링 데이터 리스트를 감싼 객체
      */
     @Transactional
+    public void saveOrUpdateNoticesWithMessage(Result<List<NoticeSaveReqDto>> data) {
+        List<Notice> notices = saveNoticesIfNotExists(data);
+        notices.addAll(updateNoticesWithCondition(data));
+        saveNoticeMessages(notices);
+    }
+
+    /**
+     * 공지사항 크롤링 데이터 저장 요청을 받아,
+     * 저장 또는 변경사항이 있을 시 업데이트가 수행됩니다
+     *
+     * 저장 전용이며 알림 발송을 위한 메세지를 저장하지 않습니다.
+     *
+     * @param data: 공지사항 크롤링 데이터 리스트를 감싼 객체
+     */
+    @Transactional
     public void saveOrUpdateNotices(Result<List<NoticeSaveReqDto>> data) {
         List<Notice> notices = saveNoticesIfNotExists(data);
         notices.addAll(updateNoticesWithCondition(data));
-
-        saveNoticeMessages(notices);
     }
 
     private List<Notice> updateNoticesWithCondition(Result<List<NoticeSaveReqDto>> data) {
