@@ -3,7 +3,6 @@
 <configuration scan="true" scanPeriod="60 seconds">
     <!-- logging level -->
     <springProperty scope="context" name="LOG_LEVEL" source="logging.level.root"/>
-
     <!-- log file path -->
     <springProperty name="LOG_PATH" source="logging.config.path"/>
     <!-- log file name -->
@@ -12,8 +11,8 @@
     <property name="ERR_LOG_FILE_NAME" value="err_log"/>
 
     <!-- pattern -->
-    <property name="CONSOLE_LOG_PATTERN" value="%highlight(%-5level) %magenta([%d{yy-MM-dd HH:mm:ss}]) %msg - %green([%logger{0}:%line]) %n"/>
-    <property name="LOG_PATTERN" value="%-5level [%d{yy-MM-dd HH:mm:ss}][%thread] [%X{traceId}] [%logger{0}:%line] - %msg%n"/>
+    <property name="CONSOLE_LOG_PATTERN" value="%highlight(%-5level) %magenta([%d{yy-MM-dd HH:mm:ss,Asia/Seoul}]) %msg - %green([%logger{0}:%line]) %n"/>
+    <property name="LOG_PATTERN" value="%-5level [%d{yy-MM-dd HH:mm:ss,Asia/Seoul}][%thread] [%X{traceId}] [%logger{0}:%line] - %msg%n"/>
 
     <!--Console Appender-->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">

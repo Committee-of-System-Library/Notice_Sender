@@ -3,22 +3,18 @@ package com.knu.noticesender.notice.model;
 import com.knu.noticesender.notice.utils.CategoryConverter;
 import com.knu.noticesender.notice.utils.NoticeTypeConverter;
 import java.time.LocalDateTime;
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.*;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * 서버 - 데이터베이스 간 공유하는 알림 데이터 클래스
  */
+@EntityListeners(AuditingEntityListener.class)
 @Entity
 @Getter
 @Table(name = "NOTICE_TABLE")
