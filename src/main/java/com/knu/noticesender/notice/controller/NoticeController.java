@@ -20,9 +20,15 @@ import java.util.List;
 public class NoticeController {
     private final NoticeProcessService noticeProcessService;
 
-    @PostMapping
-    void saveOrUpdateNotices(@RequestBody @Valid Result<List<NoticeSaveReqDto>> data) {
+    @PostMapping("/process")
+    void saveAndSendNotices(@RequestBody @Valid Result<List<NoticeSaveReqDto>> data) {
         log.info("[공지 크롤링 요청] {}개의 요청을 처리합니다.", data.getData().size());
         noticeProcessService.saveAndSendNotices(data);
+    }
+
+    @PostMapping
+    void saveOrUpdateNotices(@RequestBody @Valid Result<List<NoticeSaveReqDto>> data) {
+        log.info("[공지 크롤링 요청] {}개의 요청을 저장합니다.", data.getData().size());
+        noticeProcessService.saveNotices(data);
     }
 }
