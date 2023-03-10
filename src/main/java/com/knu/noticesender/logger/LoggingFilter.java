@@ -3,14 +3,15 @@ package com.knu.noticesender.logger;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
@@ -26,9 +27,8 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
  */
 @Order(1)
 @Component
+@Slf4j
 public class LoggingFilter extends OncePerRequestFilter {
-    protected static final Logger log = LoggerFactory.getLogger(LoggingFilter.class);
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
@@ -73,15 +73,18 @@ public class LoggingFilter extends OncePerRequestFilter {
     }
 
     private static void logRequest(RequestWrapper request) throws IOException {
+        String requestURI = request.getRequestURI();
         String queryString = request.getQueryString();
+
         log.info("Request : {} ip=[{}] uri=[{}] content-type=[{}]",
                 request.getMethod(),
                 request.getRemoteAddr(),
-                queryString == null ? request.getRequestURI() : request.getRequestURI() + queryString,
+                queryString == null ? requestURI: requestURI + queryString,
                 request.getContentType()
         );
-
-        logPayload("Request", request.getContentType(), request.getInputStream());
+        if (LoggingSupport.toLogPayload(requestURI)) {
+            logPayload("Request", request.getContentType(), request.getInputStream());
+        }
     }
 
     private static void logResponse(ContentCachingResponseWrapper response) throws IOException {
@@ -116,5 +119,24 @@ public class LoggingFilter extends OncePerRequestFilter {
 
         return VISIBLE_TYPES.stream()
                 .anyMatch(visibleType -> visibleType.includes(mediaType));
+    }
+
+    private static class LoggingSupport {
+        private static final Set<String> noPayloadUris;
+
+        /**
+         * payload 를 로깅하지 않을 uri 목록.
+         */
+        static {
+            noPayloadUris = new HashSet<>();
+            noPayloadUris.add("/notice");
+        }
+
+        public static boolean toLogPayload(String requestURI) {
+            for (String uri : noPayloadUris) {
+                if (requestURI.startsWith(uri)) { return false; }
+            }
+            return true;
+        }
     }
 }
