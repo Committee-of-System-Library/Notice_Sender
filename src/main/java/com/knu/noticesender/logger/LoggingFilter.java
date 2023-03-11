@@ -82,7 +82,7 @@ public class LoggingFilter extends OncePerRequestFilter {
                 queryString == null ? requestURI: requestURI + queryString,
                 request.getContentType()
         );
-        if (LoggingSupport.toLogPayload(requestURI)) {
+        if (LoggingSupport.isUrlToLogPayload(requestURI)) {
             logPayload("Request", request.getContentType(), request.getInputStream());
         }
     }
@@ -132,11 +132,8 @@ public class LoggingFilter extends OncePerRequestFilter {
             noPayloadUris.add("/notice");
         }
 
-        public static boolean toLogPayload(String requestURI) {
-            for (String uri : noPayloadUris) {
-                if (requestURI.startsWith(uri)) { return false; }
-            }
-            return true;
+        public static boolean isUrlToLogPayload(String requestURI) {
+            return noPayloadUris.stream().noneMatch(requestURI::startsWith);
         }
     }
 }
