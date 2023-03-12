@@ -1,13 +1,13 @@
 discord:
   urls:
-    all: ${DISCORD_ALL}
-    student: ${DISCORD_STUDENT}
-    normal: ${DISCORD_NORMAL}
-    scholarship: ${DISCORD_SCHOLARSHIP}
-    sim-com: ${DISCORD_SIM_COM}
-    gl-sop: ${DISCORD_GL_SOP}
-    graduate: ${DISCORD_GRADUATE}
-    graduate-contract: ${DISCORD_GRADUATE_CONTRACT}
+    all: ${DISCORD_DEV}
+    student: ${DISCORD_DEV}
+    normal: ${DISCORD_DEV}
+    scholarship: ${DISCORD_DEV}
+    sim-com: ${DISCORD_DEV}
+    gl-sop: ${DISCORD_DEV}
+    graduate: ${DISCORD_DEV}
+    graduate-contract: ${DISCORD_DEV}
 
 server:
   port: ${PORT}
@@ -22,9 +22,9 @@ springdoc:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: ${DB_DEV_URL}
+    username: ${DB_DEV_USERNAME}
+    password: ${DB_DEV_PASSWORD}
   jpa:
     hibernate:
       ddl-auto:
@@ -38,4 +38,4 @@ logging:
   level:
     root: debug
   config:
-    path: ./logs
+    path: ${LOGGING_PATH}
