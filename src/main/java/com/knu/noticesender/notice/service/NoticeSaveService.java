@@ -59,17 +59,17 @@ public class NoticeSaveService {
                 .peek(dto -> log.info("[공지 크롤링 요청] 공지 업데이트 num: {}, category: {}", dto.getNum(), dto.getCategory()))
                 .map(this::updateAndGetNotice)
                 .collect(Collectors.toList());
-
     }
 
     private List<Notice> saveNoticesIfNotExists(Result<List<NoticeSaveReqDto>> data) {
-        List<Notice> notices = data.getData().stream()
+        List<Notice> savedNotices = data.getData().stream()
                 .filter(dto -> noticeRepository.notExistsByNum(dto.getNum()))
                 .map(NoticeSaveReqDto::toEntity)
+                .peek(savedNotice -> {log.info("[공지 크롤링 요청] 공지 저장 num: {}, title: {}, link: {}", savedNotice.getNum(), savedNotice.getTitle(), savedNotice.getLink());})
                 .collect(Collectors.toList());
-        log.info("[공지 크롤링 요청] {} 개의 공지를 저장합니다.", notices.size());
 
-        return noticeRepository.saveAll(notices);
+        log.info("[공지 크롤링 요청] {} 개의 공지를 저장합니다.", savedNotices.size());
+        return noticeRepository.saveAll(savedNotices);
     }
 
     private void saveNoticeMessages(List<Notice> notices) {
