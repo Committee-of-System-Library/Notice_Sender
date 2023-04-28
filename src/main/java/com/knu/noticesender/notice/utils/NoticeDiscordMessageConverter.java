@@ -18,7 +18,7 @@ public class NoticeDiscordMessageConverter {
     public static DiscordMessage convertToDiscordMessage(String botName, NoticeDto dto) {
         DiscordMessage message = new DiscordMessage();
         message.setUsername(botName);
-        message.setContent("\uD83D\uDCE2 " + dto.getType());
+        message.setContent("\uD83D\uDCE2 " + dto.getType() + "\n" + createTitle(dto));
         message.setEmbeds(createEmbedMessages(dto));
         return message;
     }
@@ -29,7 +29,7 @@ public class NoticeDiscordMessageConverter {
         fields.add(new Field("\u200B", dto.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm"))));
 
         Embed embed = Embed.builder()
-                .title(String.format("[%s] %s", dto.getCategory().getDesc(), dto.getTitle()))
+                .title(createTitle(dto))
                 .url(dto.getLink())
                 .description("")
                 .fields(fields)
@@ -37,5 +37,9 @@ public class NoticeDiscordMessageConverter {
                 .build();
         embeds.add(embed);
         return embeds;
+    }
+
+    private static String createTitle(NoticeDto dto) {
+        return String.format("[%s] %s", dto.getCategory().getDesc(), dto.getTitle());
     }
 }
